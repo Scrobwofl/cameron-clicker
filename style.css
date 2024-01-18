@@ -1,0 +1,218 @@
+@keyframes scaler {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.8);
+  }
+}
+
+.scaleIt {
+  animation: 0.04s scaler ease-out;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+body {
+  background-color: black;
+  max-width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 1fr 2fr 6fr 1fr;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.5em;
+  grid-template-areas:
+    " heading heading heading heading heading heading"
+    " . countdown countdown countdown countdown ."
+    "middle middle middle middle middle middle"
+    "bottom bottom bottom bottom bottom bottom";
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-self: center;
+}
+header,
+section {
+  display: grid;
+}
+
+header {
+  grid-area: heading;
+  background-color: darkslategray;
+  width: 100%;
+  height: 100%;
+  /* border: 1px solid white; */
+  /* border-radius: 1em; */
+}
+
+header > h1 {
+  font-size: 2em;
+  padding: 0.5em;
+  color: white;
+}
+
+header > h2 {
+  font-size: 1.5em;
+  margin: 0 1em 1em 1em;
+}
+
+#subheading {
+  grid-area: countdown;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#subheading > p {
+  color: white;
+  padding: 0.5em;
+  margin: 0.5em;
+  background-color: darkslategray;
+  border-radius: 1em;
+}
+
+#middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: middle;
+  background-image: url(./images/bg-image-1024x681.webp);
+  background-position: center;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+#countdown-bar {
+  grid-area: countdown;
+  background-color: darkslategray;
+  border-radius: 1em;
+  height: 4em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+#inner-bar {
+  margin: 1em 0.6em;
+  background: rgb(255, 0, 0);
+  background: linear-gradient(
+    85deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(31, 255, 0, 1) 100%
+  );
+  height: 80%;
+  width: 100%;
+  border-radius: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inner-bar > p {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* #high-scores {
+  grid: countdown;
+  background-color: red;
+  height: 100%;
+  width: 100%;
+} */
+
+#bottom {
+  grid-area: bottom;
+}
+
+#bottom > h3 {
+  color: white;
+  margin: 1em;
+}
+
+#upgrades-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: darkslategray;
+  width: 100%;
+}
+
+#upgrades-container > img {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 55px;
+  filter: grayscale(80%);
+}
+
+.upgrade-active {
+  filter: grayscale(0%) !important;
+}
+/* #countdown-bar {
+} */
+
+/* #high-scores {
+} */
+
+#clickable-image {
+  background-image: url(./images/david-cameron.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 400px;
+  width: 250px;
+  -webkit-filter: drop-shadow(0px 0px 10px #fff);
+  filter: drop-shadow(0px 0px 10px #fff);
+}
+
+#clickable-image:hover {
+  -webkit-filter: drop-shadow(0px 0px 5px #222);
+  filter: drop-shadow(0px 0px 5px #222);
+}
+
+#bottom {
+  width: 100%;
+}
+
+#bottom > p {
+  color: white;
+  background-color: darkgray;
+  padding: 0.2em;
+}
+
+@media (min-width: 750px) and (orientation: landscape) {
+  body {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr 1fr 6fr 1fr;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    grid-template-areas:
+      ". heading heading heading heading heading heading ."
+      ". . . countdown countdown . . ."
+      ". middle middle middle middle middle middle ."
+      ". bottom bottom bottom bottom bottom bottom .";
+  }
+  #inner-bar {
+    margin: 0.8em 0.3em;
+  }
+  #upgrades-container > img {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 120px;
+    width: 90px;
+  }
+}
