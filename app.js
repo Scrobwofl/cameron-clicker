@@ -40,6 +40,52 @@ const outerCountdownBar = document.querySelector("#inner-bar");
 const innerCountdownBar = document.querySelector("#inner-bar");
 const reducerContainer = document.querySelector("#reducer-container");
 const multiplierContainer = document.querySelector("#multiplier-container");
+const muteContainer = document.querySelector("#mute-container");
+const gameResetBtn = document.querySelector("#btn-restart");
+const gameOver = document.querySelector("#game-over");
+const highScoreBtn = document.querySelector("#btn-high-score");
+const highScorePage = document.querySelector("#high-score-page");
+
+// Declaring a starting object structure
+let userObject = {
+  currentScore: 10,
+  multiplier: 1,
+  muteState: false,
+  scoreHistory: [],
+  gameState: "david-cameron",
+};
+
+// Initial Variables
+let gameTime = 100000;
+let gameState = userObject.gameState;
+let currentScore = userObject.currentScore;
+let multiplierValue = userObject.multiplier;
+let muteState = userObject.muteState;
+let scoreHistory = userObject.scoreHistory;
+
+// Handling the mute functionality
+function muteButtonHandler() {
+  if (!muteState) {
+    muteContainer.classList.remove("muted");
+    muteContainer.classList.add("unmuted");
+    muteState = true;
+  } else {
+    muteContainer.classList.remove("unmuted");
+    muteContainer.classList.add("muted");
+    muteState = false;
+  }
+}
+muteContainer.addEventListener("click", muteButtonHandler);
+
+// A button to reset the game
+gameResetBtn.addEventListener("click", () => {
+  window.location.reload();
+});
+
+// Open the high score menu
+highScoreBtn.addEventListener("click", () => {
+  highScorePage.classList.toggle("high-score-overlay");
+});
 
 // Utility function - Image Appender
 function createImageNode(imageLocation) {
@@ -51,27 +97,28 @@ function createImageNode(imageLocation) {
 
 // Upgrade images - array loop and append
 upgradeImages.forEach((img, count) => {
-  upgradeContainer.appendChild(createImageNode(img));
-  // count = count * 100;
+  let faceValue = count * 1;
+  let reducerValue = count * -1; // Assuming you'll use it elsewhere
+  let newDiv = document.createElement("div");
+  let p = document.createElement("p");
+
+  // Append div to container
+  upgradeContainer.appendChild(newDiv);
+
+  // Append image to div
+  newDiv.appendChild(createImageNode(img)).appendChild(p);
+
+  // Set text content and append to div also
+
+  p.textContent = `${faceValue}`;
 });
 
-// Declaring a starting object structure
-let userObject = {
-  currentScore: 10,
-  multiplier: 1,
-};
-
-// Initial Variables
-let gameTime = 100;
-let currentScore = userObject.currentScore;
-let multiplierValue = userObject.multiplier;
-
-// Utility Function to generate random values
+// Utility Function  - Generate random values
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Play a random sound from the
+// Get a random sound from the sounds array
 function playSound() {
   let i = getRandomNumber(0, hitSoundsArray.length);
   hitSoundsArray[i].play();
@@ -80,19 +127,21 @@ function playSound() {
 // Click event listener
 clickableImage.addEventListener("click", () => {
   // Play random sound
-  playSound();
+  if (muteState) {
+    playSound();
+  }
+  // Work out current score
   currentScore = currentScore + multiplierValue;
+  // Update ui with score
   scoreContainer.innerHTML = `<p>Score: ${currentScore}</p>`;
-
   // Randomly rotate the head on click
   const randomRotation = getRandomNumber(-20, 20);
   clickableImage.style.transform = `rotate(${randomRotation}deg)`;
-
   //Reset the transform rotate after 1 sec.
   setTimeout(() => {
     clickableImage.style.transform = "rotate(0deg)";
   }, 1000);
-
+  //scale the image on click
   clickableImage.classList.add("scaleIt");
 
   // A handler function for the animationend event
@@ -106,53 +155,63 @@ clickableImage.addEventListener("click", () => {
     once: true,
   });
 });
-// for (let i= 0; currentScore)
-let gameState = "david-cameron";
 
-function gameStateCalculator(gameState) {
-  clickableImage.style.backgroundImage = `url(./images/${gameState}.png`;
+// High Score Update
+function addHighScore(finalScore) {
+  const p = document.createElement("p");
+  const newItem = highScorePage.append(finalScore);
+  const newItemStyled = newItem.style.classList("high-score-item");
+  newItemStyled.append(`${finalScore}`);
+  userObject.scoreHistory.push(finalScore);
 }
-// function gameState() {}
+
+// Game state evaluation functions
+function bgImageCalc(character) {
+  clickableImage.style.backgroundImage = `url(./images/${character}.png`;
+}
 
 function gameEvaluator(x) {
   if (!gameTime == 0) {
     if (x > 0 && x <= 49) {
     } else if (x >= 50 && x <= 199) {
-      gameStateCalculator("keir-starmer");
+      bgImageCalc("keir-starmer");
+      multiplierValue = multiplierValue + 1;
     } else if (x >= 200 && x <= 299) {
-      gameStateCalculator("rishi-sunak");
+      bgImageCalc("rishi-sunak");
+      multiplierValue = multiplierValue + 2;
     } else if (x >= 300 && x <= 399) {
-      gameStateCalculator("michael-gove");
+      bgImageCalc("michael-gove");
+      multiplierValue = multiplierValue + 3;
     } else if (x >= 400 && x <= 499) {
-      gameStateCalculator("nigel-farage");
-    } else if (x >= 500 && x <= 599) {
-      gameStateCalculator("theresa-may");
-    } else if (x <= 0) {
-      gameStateCalculator("game-over");
+      bgImageCalc("nigel-farage");
+      multiplierValue = multiplierValue + 4;
+    } else if (x >= 500) {
+      bgImageCalc("theresa-may");
+      multiplierValue = multiplierValue + 5;
+    } else {
       rabble.play();
+      clearInterval();
       alert(
         "You have faced a parliamentary defeat you weasal! Back to the shadow cabinet for you!"
       );
     }
   } else {
-    gameStateCalculator("game-over");
+    // gameStateCalculator("game-over");
+    gameOver.classList.add("game-over-overlay");
     rabble.play();
-    alert("Your time is up!");
+    clearInterval();
+    addHighScore(x);
   }
-
-  // Timer Updater
-  setInterval(() => {
-    gameEvaluator(currentScore);
-    console.log(currentScore);
-    gameTime = gameTime - 1;
-    gameTimeContainer.textContent = `${gameTime}`;
-    innerCountdownBar.setAttribute("style", `width:${gameTime}%`);
-    multiplierContainer.innerHTML = `<p>Public Apathy: ${multiplierValue}</p>`;
-  }, 1000);
 }
+// Timer Updater
+setInterval(() => {
+  gameTime = gameTime - 1;
+  gameEvaluator(currentScore);
+  gameTimeContainer.textContent = `${gameTime}`;
+  innerCountdownBar.setAttribute("style", `width:${gameTime}%`);
+  multiplierContainer.innerHTML = `<p>Public Apathy: ${multiplierValue}</p>`;
+}, 1000);
 
 // To Do
 // ======
 // Local Storage
-// Scoreboard
-//

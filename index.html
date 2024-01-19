@@ -8,6 +8,18 @@
     <script src="app.js" defer></script>
   </head>
   <body>
+    <section id="game-over">
+      <div id="eog-title-container">
+        <h1>Game Over!</h1>
+        <p>The timer has run out!</p>
+        <p>You scored: 0 points!</p></p>
+        <button id="btn-restart">Restart The Game</button>
+      </div>
+    </section>
+    <button id="btn-high-score"><span>High Scores</span></button>
+    <section id="high-score-page">
+      <h1>Your High Scores</h1>
+    </section>
     <header>
       <audio src="./audio/hit_sound_1.mp3" id="hit-sound-1"></audio>
       <audio src="./audio/hit_sound_2.mp3" id="hit-sound-2"></audio>
@@ -17,7 +29,8 @@
       <audio src="./audio/hit_sound_6.mp3" id="hit-sound-6"></audio>
       <audio src="./audio/hit_sound_7.mp3" id="hit-sound-7"></audio>
       <audio src="./audio/hit_sound_8.mp3" id="hit-sound-8"></audio>
-      <audio src="./audio/rabble.mp3" id="rabble-sound"></audio>
+      <audio src="./audio/rabble.mp3" id="rabble"></audio>
+      <div id="mute-container" class="unmuted"></div>
       <h1>CameronClicker</h1>
       <h2 id="multiplier-container"><p>Multiplier: 1</p></h2>
       <h2 id="score-container"><p>Score: 0</p></h2>
