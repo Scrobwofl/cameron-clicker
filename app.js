@@ -27,7 +27,7 @@ const upgradeContainer = document.querySelector("#upgrades-container");
 const clickableImage = document.querySelector("#clickable-image");
 const scoreContainer = document.querySelector("#score-container");
 const gameTimeContainer = document.querySelector("#game-time");
-const outerCountdownBar = document.querySelector("#inner-bar");
+const outerCountdownBar = document.querySelector("#countdown-bar");
 const innerCountdownBar = document.querySelector("#inner-bar");
 const reducerContainer = document.querySelector("#reducer-container");
 const multiplierContainer = document.querySelector("#multiplier-container");
@@ -53,6 +53,7 @@ let currentScore = userObject.currentScore;
 let multiplierValue = userObject.multiplier;
 let muteState = userObject.muteState;
 let scoreHistory = userObject.scoreHistory;
+const timestamp = new Date().getTime();
 
 // Handling the mute functionality
 function muteButtonHandler() {
@@ -88,26 +89,6 @@ const politicianNames = [
   "theresa-may",
 ];
 
-// Dead but nice Code
-// // Utility function - Image Appender
-// function createImageNode(name, faceValue) {
-//   let img = document.createElement("img");
-//   let address = `./images/${name}.png`;
-//   img.src = `${address}`;
-//   img.style.margin = ".5em";
-//   img.setAttribute("id", `${name}`);
-//   img.classList.add("obscured");
-//   console.log(img.classList);
-//   return img;
-// }
-// // Multiplier section images - array loop through and append images
-// politicianNames.forEach((name) => {
-//   const EOGFaces = document.querySelector("#eog-faces");
-//   let newDiv = document.createElement("div");
-//   // Add Images to the End Of Game screen
-//   EOGFaces.appendChild(createImageNode(name));
-// });
-
 // Utility Function  - Generate random values
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -128,7 +109,7 @@ clickableImage.addEventListener("click", () => {
   // Work out current score
   currentScore = currentScore + multiplierValue;
   // Update ui with score
-  scoreContainer.innerHTML = `<p>Score: ${currentScore}</p>`;
+  scoreContainer.innerHTML = `Score: ${currentScore}`;
   // Randomly rotate the head on click
   const randomRotation = getRandomNumber(-20, 20);
   clickableImage.style.transform = `rotate(${randomRotation}deg)`;
@@ -174,7 +155,7 @@ function loadHighScores() {
 function addHighScore(finalScore) {
   const p = document.createElement("p");
   p.classList.add("high-score-item");
-  p.textContent = finalScore;
+  p.textContent = `${timestamp}: ${finalScore}`;
   highScoresContainer.appendChild(p);
 }
 
@@ -261,7 +242,7 @@ function gameEvaluator(score) {
     if (score > 0 && score <= 49) {
       gameState = "david-cameron";
       // davidCameron.classList.add("upgrade-active");
-    } else if (score >= 50 && score <= 199) {
+    } else if (score >= 100 && score <= 199) {
       gameState = "keir-starmer";
       // keirStarmer.classList.add("upgrade-active");
     } else if (score >= 200 && score <= 299) {
@@ -277,8 +258,10 @@ function gameEvaluator(score) {
       gameState = "theresa-may";
       // theresaMay.classList.add("upgrade-active");
     } else {
-      rabble.play();
-      clearInterval(theInterval);
+      if (muteState) {
+        rabble.play();
+      }
+      clearInterval(mainInterval);
       alert(
         "You scored zero! You have faced a parliamentary defeat you weasal! Back to the shadow cabinet for you!"
       );
@@ -286,8 +269,10 @@ function gameEvaluator(score) {
   } else {
     const EOGScore = document.querySelector("#eog-points");
     gameOver.classList.add("game-over-overlay");
-    rabble.play();
-    clearInterval(theInterval);
+    if (muteState) {
+      rabble.play();
+    }
+    clearInterval(mainInterval);
     EOGScore.innerHTML = `Your final score was: ${currentScore}`;
     addHighScore(score);
     updateHighScores(currentScore);
@@ -298,10 +283,10 @@ function gameEvaluator(score) {
 }
 
 // Timer Updater
-const theInterval = setInterval(() => {
+const mainInterval = setInterval(() => {
   gameTime = gameTime - 1;
   gameEvaluator(currentScore);
   gameTimeContainer.textContent = `${gameTime}`;
   innerCountdownBar.setAttribute("style", `width:${gameTime}%`);
-  multiplierContainer.innerHTML = `<p>Public Apathy: ${multiplierValue}</p>`;
+  multiplierContainer.innerHTML = `Public Apathy: ${multiplierValue}`;
 }, 1000);
