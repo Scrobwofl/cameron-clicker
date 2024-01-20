@@ -1,14 +1,5 @@
 console.log("JS connected...");
 
-// Images to use for upgrades
-const upgradeImages = [
-  "./images/david-cameron.png",
-  "./images/keir-starmer.png",
-  "./images/rishi-sunak.png",
-  "./images/michael-gove.png",
-  "./images/nigel-farage.png",
-  "./images/theresa-may.png",
-];
 // Sound Imports
 const sound1 = document.querySelector("#hit-sound-1");
 const sound2 = document.querySelector("#hit-sound-2");
@@ -45,18 +36,18 @@ const gameResetBtn = document.querySelector("#btn-restart");
 const gameOver = document.querySelector("#game-over");
 const highScoreBtn = document.querySelector("#btn-high-score");
 const highScorePage = document.querySelector("#high-score-page");
+const highScoresContainer = document.querySelector("#high-scores-container");
 
 // Declaring a starting object structure
 let userObject = {
-  currentScore: 10,
+  currentScore: 1,
   multiplier: 1,
-  muteState: false,
-  scoreHistory: [],
+  muteState: true,
   gameState: "david-cameron",
 };
 
 // Initial Variables
-let gameTime = 100000;
+let gameTime = 100;
 let gameState = userObject.gameState;
 let currentScore = userObject.currentScore;
 let multiplierValue = userObject.multiplier;
@@ -87,31 +78,35 @@ highScoreBtn.addEventListener("click", () => {
   highScorePage.classList.toggle("high-score-overlay");
 });
 
-// Utility function - Image Appender
-function createImageNode(imageLocation) {
-  let img = document.createElement("img");
-  img.src = `${imageLocation}`;
-  img.style.margin = ".5em";
-  return img;
-}
+// Images to use for multipliers section
+const politicianNames = [
+  "david-cameron",
+  "keir-starmer",
+  "rishi-sunak",
+  "michael-gove",
+  "nigel-farage",
+  "theresa-may",
+];
 
-// Upgrade images - array loop and append
-upgradeImages.forEach((img, count) => {
-  let faceValue = count * 1;
-  let reducerValue = count * -1; // Assuming you'll use it elsewhere
-  let newDiv = document.createElement("div");
-  let p = document.createElement("p");
-
-  // Append div to container
-  upgradeContainer.appendChild(newDiv);
-
-  // Append image to div
-  newDiv.appendChild(createImageNode(img)).appendChild(p);
-
-  // Set text content and append to div also
-
-  p.textContent = `${faceValue}`;
-});
+// Dead but nice Code
+// // Utility function - Image Appender
+// function createImageNode(name, faceValue) {
+//   let img = document.createElement("img");
+//   let address = `./images/${name}.png`;
+//   img.src = `${address}`;
+//   img.style.margin = ".5em";
+//   img.setAttribute("id", `${name}`);
+//   img.classList.add("obscured");
+//   console.log(img.classList);
+//   return img;
+// }
+// // Multiplier section images - array loop through and append images
+// politicianNames.forEach((name) => {
+//   const EOGFaces = document.querySelector("#eog-faces");
+//   let newDiv = document.createElement("div");
+//   // Add Images to the End Of Game screen
+//   EOGFaces.appendChild(createImageNode(name));
+// });
 
 // Utility Function  - Generate random values
 function getRandomNumber(min, max) {
@@ -126,7 +121,7 @@ function playSound() {
 
 // Click event listener
 clickableImage.addEventListener("click", () => {
-  // Play random sound
+  // Play random sounds
   if (muteState) {
     playSound();
   }
@@ -157,61 +152,156 @@ clickableImage.addEventListener("click", () => {
 });
 
 // High Score Update
+function loadHighScores() {
+  // Check if there's data in local storage
+  const storedScores = localStorage.getItem("highScores");
+  let scores;
+  if (storedScores) {
+    scores = JSON.parse(storedScores);
+  } else {
+    scores = [];
+  }
+
+  // Clear existing scores from the display
+  highScoresContainer.innerHTML = "";
+
+  // Populate the high scores
+  scores.forEach((score) => {
+    addHighScore(score);
+  });
+}
+
 function addHighScore(finalScore) {
   const p = document.createElement("p");
-  const newItem = highScorePage.append(finalScore);
-  const newItemStyled = newItem.style.classList("high-score-item");
-  newItemStyled.append(`${finalScore}`);
-  userObject.scoreHistory.push(finalScore);
+  p.classList.add("high-score-item");
+  p.textContent = finalScore;
+  highScoresContainer.appendChild(p);
 }
+
+function updateHighScores(newScore) {
+  // Retrieve existing scores from local storage
+  const storedScores = localStorage.getItem("highScores");
+  let scores;
+  if (storedScores) {
+    scores = JSON.parse(storedScores);
+  } else {
+    scores = [];
+  }
+
+  // Add the new score and update local storage
+  scores.push(newScore);
+  localStorage.setItem("highScores", JSON.stringify(scores));
+
+  // Update the displayed high scores
+  loadHighScores();
+}
+
+// Calls loadHighScores immediately on page load
+loadHighScores();
 
 // Game state evaluation functions
 function bgImageCalc(character) {
   clickableImage.style.backgroundImage = `url(./images/${character}.png`;
 }
 
-function gameEvaluator(x) {
+// Creating variables for images id's after the loop added them to ui from array
+davidCameron = document.querySelector("#david-cameron");
+keirStarmer = document.querySelector("#keir-starmer");
+rishiSunak = document.querySelector("#rishi-sunak");
+michaelGove = document.querySelector("#michael-gove");
+nigelFarage = document.querySelector("#nigel-farage");
+theresaMay = document.querySelector("#theresa-may");
+
+function updateImageFilters() {
+  // Add upgrade-active class based on gameState
+  if (gameState === "david-cameron") {
+    davidCameron.classList.remove("obscured");
+  }
+  if (gameState === "keir-starmer") {
+    keirStarmer.classList.remove("obscured");
+  }
+  if (gameState === "rishi-sunak") {
+    rishiSunak.classList.remove("obscured");
+  }
+  if (gameState === "michael-gove") {
+    michaelGove.classList.remove("obscured");
+  }
+  if (gameState === "nigel-farage") {
+    nigelFarage.classList.remove("obscured");
+  }
+  if (gameState == "theresa-may") {
+    theresaMay.classList.remove("obscured");
+  }
+}
+
+function evaluateMultiplier(gameState) {
+  if (gameState === "david-cameron") {
+    multiplierValue = 1;
+    return multiplierValue;
+  } else if (gameState === "keir-starmer") {
+    multiplierValue = 2;
+    return multiplierValue;
+  } else if (gameState === "rishi-sunak") {
+    multiplierValue = 3;
+    return multiplierValue;
+  } else if (gameState === "michael-gove") {
+    multiplierValue = 4;
+    return multiplierValue;
+  } else if (gameState === "nigel-farage") {
+    multiplierValue = 5;
+    return multiplierValue;
+  } else if (gameState === "theresa-may") {
+    multiplierValue = 6;
+    return multiplierValue;
+  }
+}
+
+function gameEvaluator(score) {
   if (!gameTime == 0) {
-    if (x > 0 && x <= 49) {
-    } else if (x >= 50 && x <= 199) {
-      bgImageCalc("keir-starmer");
-      multiplierValue = multiplierValue + 1;
-    } else if (x >= 200 && x <= 299) {
-      bgImageCalc("rishi-sunak");
-      multiplierValue = multiplierValue + 2;
-    } else if (x >= 300 && x <= 399) {
-      bgImageCalc("michael-gove");
-      multiplierValue = multiplierValue + 3;
-    } else if (x >= 400 && x <= 499) {
-      bgImageCalc("nigel-farage");
-      multiplierValue = multiplierValue + 4;
-    } else if (x >= 500) {
-      bgImageCalc("theresa-may");
-      multiplierValue = multiplierValue + 5;
+    if (score > 0 && score <= 49) {
+      gameState = "david-cameron";
+      // davidCameron.classList.add("upgrade-active");
+    } else if (score >= 50 && score <= 199) {
+      gameState = "keir-starmer";
+      // keirStarmer.classList.add("upgrade-active");
+    } else if (score >= 200 && score <= 299) {
+      gameState = "rishi-sunak";
+      // rishiSunak.classList.add("upgrade-active");
+    } else if (score >= 300 && score <= 499) {
+      gameState = "michael-gove";
+      // michaelGove.classList.add("upgrade-active");
+    } else if (score >= 500 && score <= 999) {
+      gameState = "nigel-farage";
+      // nigelFarage.classList.add("upgrade-active");
+    } else if (score >= 1000) {
+      gameState = "theresa-may";
+      // theresaMay.classList.add("upgrade-active");
     } else {
       rabble.play();
-      clearInterval();
+      clearInterval(theInterval);
       alert(
-        "You have faced a parliamentary defeat you weasal! Back to the shadow cabinet for you!"
+        "You scored zero! You have faced a parliamentary defeat you weasal! Back to the shadow cabinet for you!"
       );
     }
   } else {
-    // gameStateCalculator("game-over");
+    const EOGScore = document.querySelector("#eog-points");
     gameOver.classList.add("game-over-overlay");
     rabble.play();
-    clearInterval();
-    addHighScore(x);
+    clearInterval(theInterval);
+    EOGScore.innerHTML = `Your final score was: ${currentScore}`;
+    addHighScore(score);
+    updateHighScores(currentScore);
   }
+  multiplierValue = evaluateMultiplier(gameState);
+  updateImageFilters();
+  bgImageCalc(gameState);
 }
+
 // Timer Updater
-setInterval(() => {
+const theInterval = setInterval(() => {
   gameTime = gameTime - 1;
   gameEvaluator(currentScore);
   gameTimeContainer.textContent = `${gameTime}`;
   innerCountdownBar.setAttribute("style", `width:${gameTime}%`);
   multiplierContainer.innerHTML = `<p>Public Apathy: ${multiplierValue}</p>`;
 }, 1000);
-
-// To Do
-// ======
-// Local Storage

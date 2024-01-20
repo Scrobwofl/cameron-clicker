@@ -27,8 +27,6 @@ body {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 1fr 2fr 6fr 1fr;
-  grid-column-gap: 0.5em;
-  grid-row-gap: 0.5em;
   grid-template-areas:
     " heading heading heading heading heading heading"
     " . countdown countdown countdown countdown ."
@@ -90,6 +88,11 @@ header > h2 {
   margin-top: 5px;
 }
 
+#score-container {
+  /* color: black; */
+  margin-bottom: 0.4em;
+}
+
 #subheading {
   grid-area: countdown;
   display: flex;
@@ -119,6 +122,7 @@ header > h2 {
 }
 
 #countdown-bar {
+  position: relative;
   grid-area: countdown;
   background-color: darkslategray;
   border-radius: 1em;
@@ -126,11 +130,11 @@ header > h2 {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: start;
 }
+
 #inner-bar {
-  margin: 0.6em 1em;
   background: rgb(255, 0, 0);
   background: linear-gradient(
     85deg,
@@ -140,13 +144,11 @@ header > h2 {
   height: 100%;
   width: 100%;
   border-radius: 1em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  justify-items: center;
 }
 
 #game-time {
+  left: 45%;
+  top: 2px;
   position: absolute;
   font-size: 2em;
   font-weight: bold;
@@ -166,6 +168,10 @@ header > h2 {
 
 #bottom > h3 {
   color: white;
+}
+
+#multiplier-container {
+  color: white;
   margin: 1em;
 }
 
@@ -177,29 +183,26 @@ header > h2 {
   align-items: center;
   background-color: darkslategray;
   width: 100%;
+  gap: 1em;
 }
 
-#upgrades-container > div > img {
-  position: relative;
+#upgrades-container img {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   height: 80px;
   width: 55px;
-  filter: grayscale(80%);
   z-index: 2;
 }
 
-#upgrades-container > div > img > p {
-  position: absolute;
+#upgrades-container p {
   font-weight: bold;
-  /* top: 60px; */
-  /* right: 20px; */
+  margin: 0.5em 0 0 0;
   z-index: 50;
 }
 
-.upgrade-active {
-  filter: grayscale(0%) !important;
+.obscured {
+  opacity: 0.1;
 }
 
 #clickable-image {
@@ -225,7 +228,7 @@ header > h2 {
 #bottom > p {
   color: white;
   background-color: darkgray;
-  padding: 0.2em;
+  padding: 0.3em;
 }
 
 #game-over {
@@ -308,7 +311,17 @@ header > h2 {
 }
 
 .high-score-item {
+  font-size: 2em;
   margin: 0.5em;
+}
+#eog-faces {
+  display: inline;
+}
+
+#eog-faces > img {
+  height: 5em;
+  margin-left: -10em;
+  width: auto;
 }
 
 @media (min-width: 750px) and (orientation: landscape) {

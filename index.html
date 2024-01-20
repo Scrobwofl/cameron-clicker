@@ -3,40 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cameron Clicker</title>
+    <title>FaceyVote</title>
     <link rel="stylesheet" href="style.css" />
     <script src="app.js" defer></script>
   </head>
   <body>
+    <audio src="./audio/hit_sound_1.mp3" id="hit-sound-1"></audio>
+    <audio src="./audio/hit_sound_2.mp3" id="hit-sound-2"></audio>
+    <audio src="./audio/hit_sound_3.mp3" id="hit-sound-3"></audio>
+    <audio src="./audio/hit_sound_4.mp3" id="hit-sound-4"></audio>
+    <audio src="./audio/hit_sound_5.mp3" id="hit-sound-5"></audio>
+    <audio src="./audio/hit_sound_6.mp3" id="hit-sound-6"></audio>
+    <audio src="./audio/hit_sound_7.mp3" id="hit-sound-7"></audio>
+    <audio src="./audio/hit_sound_8.mp3" id="hit-sound-8"></audio>
+    <audio src="./audio/rabble.mp3" id="rabble"></audio>
     <section id="game-over">
       <div id="eog-title-container">
+        <div id="eog-faces"></div>
         <h1>Game Over!</h1>
         <p>The timer has run out!</p>
-        <p>You scored: 0 points!</p></p>
+        <p id="eog-points">You scored: 0 points!</p>
         <button id="btn-restart">Restart The Game</button>
       </div>
     </section>
     <button id="btn-high-score"><span>High Scores</span></button>
     <section id="high-score-page">
       <h1>Your High Scores</h1>
+      <div id="high-scores-container"></div>
     </section>
     <header>
-      <audio src="./audio/hit_sound_1.mp3" id="hit-sound-1"></audio>
-      <audio src="./audio/hit_sound_2.mp3" id="hit-sound-2"></audio>
-      <audio src="./audio/hit_sound_3.mp3" id="hit-sound-3"></audio>
-      <audio src="./audio/hit_sound_4.mp3" id="hit-sound-4"></audio>
-      <audio src="./audio/hit_sound_5.mp3" id="hit-sound-5"></audio>
-      <audio src="./audio/hit_sound_6.mp3" id="hit-sound-6"></audio>
-      <audio src="./audio/hit_sound_7.mp3" id="hit-sound-7"></audio>
-      <audio src="./audio/hit_sound_8.mp3" id="hit-sound-8"></audio>
-      <audio src="./audio/rabble.mp3" id="rabble"></audio>
       <div id="mute-container" class="unmuted"></div>
-      <h1>CameronClicker</h1>
-      <h2 id="multiplier-container"><p>Multiplier: 1</p></h2>
+      <h1>FaceyVote!</h1>
       <h2 id="score-container"><p>Score: 0</p></h2>
     </header>
     <section id="subheading">
-      <p>Click to add time before the counter runs out!!</p>
+      <p>
+        Click the annoying politician face to increase your votes before the
+        time runs out and you can't spend all their money!!
+      </p>
       <div id="countdown-bar">
         <div id="inner-bar"></div>
         <p id="game-time">Ready?</p>
@@ -47,9 +51,64 @@
       <div id="clickable-image"></div>
     </section>
     <section id="bottom">
-      <h3>Multipliers</h3>
-      <p>Hit the score to receive an upgrade (for a cost).</p>
-      <div id="upgrades-container"></div>
+      <h2 id="multiplier-container">Public Apathy: 1</h2>
+      <p>Hit the score to receive an apathy upgrade.</p>
+      <div id="upgrades-container">
+        <div class="upgrade-item">
+          <p>0</p>
+          <img
+            src="./images/david-cameron.png"
+            id="david-cameron"
+            class="obscured"
+          />
+          <p>x0</p>
+        </div>
+        <div class="upgrade-item">
+          <p>100</p>
+          <img
+            src="./images/keir-starmer.png"
+            id="keir-starmer"
+            class="obscured"
+          />
+          <p>x1</p>
+        </div>
+        <div class="upgrade-item">
+          <p>200</p>
+          <img
+            src="./images/rishi-sunak.png"
+            id="rishi-sunak"
+            class="obscured"
+          />
+          <p>x2</p>
+        </div>
+        <div class="upgrade-item">
+          <p>300</p>
+          <img
+            src="./images/michael-gove.png"
+            id="michael-gove"
+            class="obscured"
+          />
+          <p>x3</p>
+        </div>
+        <div class="upgrade-item">
+          <p>400</p>
+          <img
+            src="./images/nigel-farage.png"
+            id="nigel-farage"
+            class="obscured"
+          />
+          <p>x4</p>
+        </div>
+        <div class="upgrade-item">
+          <p>500</p>
+          <img
+            src="./images/theresa-may.png"
+            id="theresa-may"
+            class="obscured"
+          />
+          <p>x5</p>
+        </div>
+      </div>
     </section>
   </body>
 </html>
