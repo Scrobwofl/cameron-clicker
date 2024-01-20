@@ -64,7 +64,7 @@ header > h2 {
   background-color: lightgrey;
   border-radius: 1em;
   font-size: 1.5em;
-  padding: 0.5em;
+  padding: 0.3em;
   margin: 0 0.5em 0 0.5em;
 }
 
@@ -180,7 +180,8 @@ header > h2 {
 
 #bottom > h2 {
   color: white;
-  font-size: 2em;
+  font-size: 1.6em;
+  padding-top: 0.2em;
 }
 
 #multiplier-container {
@@ -370,17 +371,9 @@ header > h2 {
       ". bottom bottom bottom bottom bottom bottom .";
   }
 
-  #score-container {
-    font-size: 2em;
-  }
-
   #countdown-bar {
     height: 2em;
   }
-  /* 
-  #countdown-bar > p {
-    font-size: 1.5em;
-  } */
 
   #clickable-image {
     height: 400px;
